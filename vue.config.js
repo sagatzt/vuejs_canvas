@@ -9,5 +9,13 @@ module.exports = {
       compositionOnly: false,
       fullInstall: true
     }
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `@import "@/assets/scss/_variables.scss";`
+      }
+    }
   }
+
 }
