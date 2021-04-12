@@ -1,41 +1,55 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest" target="_blank" rel="noopener">unit-jest</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <div id="app">
+      <span>{{x}}, {{y}}</span>
+      <h1>Drawing with mousemove event</h1>
+      <canvas id="myCanvas" width="560" height="360" @mousemove="draw"/>
+    </div>
   </div>
 </template>
 
 <script>
+import { ref,onMounted } from '@vue/runtime-core'
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String,
+  },setup(){
+    let canvas=null
+    let x=ref(0)
+    let y=ref(0)
+
+    onMounted(()=>{
+      var c = document.getElementById("myCanvas")
+      canvas = c.getContext('2d')
+    })
+
+    function showCoordinates(e){
+      x.value=e.offsetX
+      y.value=e.offsetY
+    }
+
+    function drawLine(x1, y1, x2, y2) {
+      let ctx = canvas
+      ctx.beginPath()
+      ctx.strokeStyle = 'black'
+      ctx.lineWidth = 1
+      ctx.moveTo(x1, y1)
+      ctx.lineTo(x2, y2)
+      ctx.stroke()
+      ctx.closePath()
+    }
+    
+    function draw(e) {
+      drawLine(x.value, y.value, e.offsetX, e.offsetY)
+      x.value = e.offsetX
+      y.value = e.offsetY
+    }
+    return {
+      canvas, x, y,
+      showCoordinates, drawLine,draw
+    }
   }
 }
 </script>
@@ -56,4 +70,9 @@ li {
 a {
   color: #42b983;
 }
+
+#myCanvas {
+  border: 1px solid grey;
+}
+
 </style>
