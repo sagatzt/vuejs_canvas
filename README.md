@@ -1,4 +1,4 @@
-# vuejs_testing
+# vuejs_canvas
 
 ## Project setup
 ```

@@ -1,11 +1,12 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <div id="app">
-      <span>{{x}}, {{y}}</span>
-      <h1>Drawing with mousemove event</h1>
-      <canvas id="myCanvas" width="560" height="360" @mousemove="draw"/>
-    </div>
+    <p>Este ejemplo lo seguí del siguiente tutorial: </p>
+    <a href="https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg">
+      https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg
+    </a>      
+    <h3>{{x}}, {{y}}</h3>
+    <canvas id="myCanvas" width="560" height="360" @mousemove="draw"/>
   </div>
 </template>
 
