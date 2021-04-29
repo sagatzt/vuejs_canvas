@@ -5,21 +5,33 @@
     <a href="https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg">
       https://dev.to/reiallenramos/drawing-in-vue-using-mousemove-event-34cg
     </a>      
-    <h3>{{x}}, {{y}}</h3>
-    <canvas id="myCanvas" width="560" height="360" @mousemove="draw"/>
+    <div>Mensaje:
+      <input v-model="message"><button @click="addMessage">Añadir mensaje</button>
+    </div>
+    <div>X:<input v-model="x">Y:<input v-model="y"></div>
+    <div>Zoom:
+      <button @click="zoomIn">Zoom IN</button> | <button @click="zoomOut">Zoom Out</button>
+    </div>
+    <canvas id="myCanvas" :width="width" :height="height" @click="showCoordinates"/>
   </div>
 </template>
 
 <script>
 import { ref,onMounted } from '@vue/runtime-core'
+//http://vuejscode.com/vue-window-size
+import { useWindowSize } from 'vue-window-size'
+
 export default {
-  name: 'HelloWorld',
+  name: 'HelloWorld2',
   props: {
     msg: String,
   },setup(){
     let canvas=null
+    const width = ref(useWindowSize().width)
+    const height = ref(useWindowSize().height)
     let x=ref(0)
     let y=ref(0)
+    let message=ref("")
 
     onMounted(()=>{
       var c = document.getElementById("myCanvas")
@@ -31,25 +43,26 @@ export default {
       y.value=e.offsetY
     }
 
-    function drawLine(x1, y1, x2, y2) {
-      let ctx = canvas
-      ctx.beginPath()
-      ctx.strokeStyle = 'black'
-      ctx.lineWidth = 1
-      ctx.moveTo(x1, y1)
-      ctx.lineTo(x2, y2)
-      ctx.stroke()
-      ctx.closePath()
+    function addMessage() {
+      //https://www.w3schools.com/graphics/canvas_text.asp
+      canvas.font="30px Arial"
+      canvas.fillText(message.value,x.value,y.value)
+      
+    }
+
+    function zoomIn(){
+      canvas.scale(2, 5)
+    }
+
+    function zoomOut(){
+      canvas.scale(1,3)
     }
     
-    function draw(e) {
-      drawLine(x.value, y.value, e.offsetX, e.offsetY)
-      x.value = e.offsetX
-      y.value = e.offsetY
-    }
     return {
-      canvas, x, y,
-      showCoordinates, drawLine,draw
+      canvas, x, y, width, height,
+      message,addMessage,
+      showCoordinates,
+      zoomIn,zoomOut
     }
   }
 }
@@ -77,6 +90,7 @@ a {
 
 #myCanvas {
   border: 1px solid grey;
+  background:red;
 }
 
 </style>
